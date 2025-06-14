@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemInicio"
+        android:icon="@drawable/baseline_cottage_24"
+        android:title="Inicio" />
+    <item
+        android:id="@+id/itemRegistrar"
+        android:icon="@drawable/baseline_assignment_add_24"
+        android:title="Registrar" />
+    <item
+        android:id="@+id/itemListar"
+        android:icon="@drawable/baseline_assignment_24"
+        android:title="Listar" />
+    <item
+        android:id="@+id/itemSalir"
+        android:icon="@drawable/baseline_cancel_24"
+        android:title="Salir" />
+</menu>
