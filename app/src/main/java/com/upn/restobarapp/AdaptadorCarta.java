@@ -41,7 +41,7 @@ public class AdaptadorCarta extends RecyclerView.Adapter<AdaptadorCarta.CartaVie
         CartaDB oE= listaCarta.get(position);
         holder.lbNombre.setText(oE.getDescripcion());
         holder.lbDescripcion.setText(oE.getDescripcion());
-        holder.lbPrecio.setText(oE.getPrecio());
+        holder.lbPrecio.setText(oE.getPrecio()+"");
 
         //cargar foto de sql lite
         byte[] imagenBytes = oE.getFoto();
