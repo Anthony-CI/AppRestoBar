@@ -1,5 +1,6 @@
 package com.upn.restobarapp;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -13,30 +14,27 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.upn.restobarapp.Access.DAOCartaBD;
 import com.upn.restobarapp.Model.CartaAPI;
-import com.upn.restobarapp.Model.CartaDB;
 import com.upn.restobarapp.Network.ApiServicio;
 import com.upn.restobarapp.Network.RetrofitCliente;
 
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-
-public class ActividadMostrarTarjeta extends AppCompatActivity {
-
+public class ActividadMostrarCarta extends AppCompatActivity {
 
     private RecyclerView rvListaCarta;
     private List<CartaAPI> listaCarta;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.ly_mostrar_tarjeta);
+        setContentView(R.layout.ly_mostrar_carta);
         Toolbar toolbar = findViewById(R.id.tbMostrar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -44,7 +42,6 @@ public class ActividadMostrarTarjeta extends AppCompatActivity {
         rvListaCarta.setLayoutManager(new LinearLayoutManager(this));
         MostrarListadoDeCartaApi();
     }
-
     private void MostrarListadoDeCartaApi() {
         ProgressDialog barraProgreso = new ProgressDialog(this);
         barraProgreso.setMessage("Espere, cargando datos");
@@ -59,22 +56,20 @@ public class ActividadMostrarTarjeta extends AppCompatActivity {
                 if(response.isSuccessful() && response!=null){
                     AdaptadorCartaApi oAdaptador = null;
                     listaCarta = response.body();
-                    oAdaptador = new AdaptadorCartaApi(ActividadMostrarTarjeta.this,listaCarta);
+                    oAdaptador = new AdaptadorCartaApi(ActividadMostrarCarta.this,listaCarta);
                     rvListaCarta.setAdapter(oAdaptador);
 
                 }else {
-                    Toast.makeText(ActividadMostrarTarjeta.this, "lista vacia: " +response.message(), Toast.LENGTH_LONG);
+                    Toast.makeText(ActividadMostrarCarta.this, "lista vacia: " +response.message(), Toast.LENGTH_LONG);
                 }
                 barraProgreso.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<CartaAPI>> call, Throwable t) {
-                Toast.makeText(ActividadMostrarTarjeta.this, "Error al conectar al servidor:" +t.getMessage(), Toast.LENGTH_LONG);
+                Toast.makeText(ActividadMostrarCarta.this, "Error al conectar al servidor:" +t.getMessage(), Toast.LENGTH_LONG);
                 barraProgreso.dismiss();
             }
         });
     }
-
-
 }

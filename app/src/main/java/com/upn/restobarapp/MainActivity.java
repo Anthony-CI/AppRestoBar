@@ -44,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(oIntento);
                 return true;
             }
+            if (item.getItemId() == R.id.itemCarta) {
+                oIntento = new Intent(this, ActividadMostrarCarta.class);
+                startActivity(oIntento);
+                return true;
+            }
+
             if (item.getItemId() == R.id.itemSalir) {
                 finish();
                 return true;
