@@ -50,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
-            if (item.getItemId() == R.id.itemSalir) {
-                finish();
+            if (item.getItemId() == R.id.itemPedido) {
+                oIntento = new Intent(this, ActividadMostrarPedido.class);
+                startActivity(oIntento);
                 return true;
             }
+
             return false;
         });
     }

@@ -29,4 +29,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- RecyclerView para los pedidos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListaPedidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvListaCarta" />
+
+    <!-- Botón flotante para enviar los pedidos -->
+    <Button
+        android:id="@+id/btnEnviarPedidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enviar Pedidos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvListaPedidos" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

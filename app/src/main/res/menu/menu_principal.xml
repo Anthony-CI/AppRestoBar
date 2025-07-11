@@ -17,8 +17,10 @@
         android:id="@+id/itemCarta"
         android:icon="@drawable/baseline_assignment_24"
         android:title="Carta" />
+
     <item
-        android:id="@+id/itemSalir"
-        android:icon="@drawable/baseline_cancel_24"
-        android:title="Salir" />
+        android:id="@+id/itemPedido"
+        android:icon="@drawable/baseline_assignment_24"
+        android:title="Carta" />
+
 </menu>

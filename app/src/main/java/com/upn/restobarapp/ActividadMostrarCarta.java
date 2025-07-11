@@ -1,8 +1,12 @@
 package com.upn.restobarapp;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,10 +18,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.upn.restobarapp.Access.DAOPedidoBD;
 import com.upn.restobarapp.Model.CartaAPI;
+import com.upn.restobarapp.Model.PedidoDB;
 import com.upn.restobarapp.Network.ApiServicio;
 import com.upn.restobarapp.Network.RetrofitCliente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,8 +34,12 @@ import retrofit2.Response;
 public class ActividadMostrarCarta extends AppCompatActivity {
 
     private RecyclerView rvListaCarta;
+    private RecyclerView rvListaPedidos;
     private List<CartaAPI> listaCarta;
-
+    private ListView listView;
+    private AdaptadorPedido adaptadorPedido;
+    private List<PedidoDB> listaPedidos;
+    private DAOPedidoBD daoPedidoBD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +49,43 @@ public class ActividadMostrarCarta extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.tbMostrar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        // Inicializar el RecyclerView de las cartas
         rvListaCarta = findViewById(R.id.rvListaCarta);
         rvListaCarta.setLayoutManager(new LinearLayoutManager(this));
-        MostrarListadoDeCartaApi();
+        MostrarListadoDeCartaApi();  // Mostrar las cartas desde la API
+
+        // Inicializar el RecyclerView de los pedidos
+        rvListaPedidos = findViewById(R.id.rvListaPedidos);  // Referencia al RecyclerView de pedidos
+        rvListaPedidos.setLayoutManager(new LinearLayoutManager(this));  // Mostrar los pedidos en una lista
+
+        // Obtener los pedidos de la base de datos
+        listaPedidos = new ArrayList<>();
+        daoPedidoBD = new DAOPedidoBD(this);
+
+        // Abrir la base de datos antes de obtener los pedidos
+        daoPedidoBD.open();  // Asegúrate de abrir la base de datos antes de realizar la consulta
+        listaPedidos = daoPedidoBD.obtenerPedidos();
+        daoPedidoBD.close();  // Cierra la base de datos después de usarla
+
+        // Adaptador para los pedidos
+        adaptadorPedido = new AdaptadorPedido(listaPedidos);  // Solo pasamos la lista de pedidos
+        rvListaPedidos.setAdapter(adaptadorPedido);
+
+        // Botón flotante para enviar los pedidos
+        findViewById(R.id.btnEnviarPedidos).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostrarDialogoRegistrarPedido();
+            }
+        });
+
     }
+
+
+
+
     private void MostrarListadoDeCartaApi() {
         ProgressDialog barraProgreso = new ProgressDialog(this);
         barraProgreso.setMessage("Espere, cargando datos");
@@ -71,5 +115,23 @@ public class ActividadMostrarCarta extends AppCompatActivity {
                 barraProgreso.dismiss();
             }
         });
+    }
+
+
+    private void mostrarDialogoRegistrarPedido() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Registrar Pedido");
+        builder.setMessage("¿Deseas confirmar este pedido?");
+
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Guardar los pedidos y pasar a la siguiente actividad
+                // Aquí deberías guardar los pedidos seleccionados
+                Toast.makeText(ActividadMostrarCarta.this, "Pedido registrado", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("No", null);
+        builder.create().show();
     }
 }
