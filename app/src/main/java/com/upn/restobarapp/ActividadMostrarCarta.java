@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class ActividadMostrarCarta extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.ly_mostrar_carta);
+
+
         Toolbar toolbar = findViewById(R.id.tbMostrar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,6 +76,11 @@ public class ActividadMostrarCarta extends AppCompatActivity {
         adaptadorPedido = new AdaptadorPedido(listaPedidos);  // Solo pasamos la lista de pedidos
         rvListaPedidos.setAdapter(adaptadorPedido);
 
+
+
+
+
+
         // Botón flotante para enviar los pedidos
         findViewById(R.id.btnEnviarPedidos).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +88,8 @@ public class ActividadMostrarCarta extends AppCompatActivity {
                 mostrarDialogoRegistrarPedido();
             }
         });
+
+
 
     }
 
@@ -119,15 +129,44 @@ public class ActividadMostrarCarta extends AppCompatActivity {
 
 
     private void mostrarDialogoRegistrarPedido() {
+        // Mostrar un diálogo para ingresar el número de mesa y nombre del mozo
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialogo_mesa_mozo, null);
+        final EditText editTextMesa = customLayout.findViewById(R.id.editTextMesa);
+        final EditText editTextMozo = customLayout.findViewById(R.id.editTextMozo);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Registrar Pedido");
+        builder.setMessage("Ingresa el número de la mesa y el nombre del mozo");
+
+        builder.setView(customLayout);
+
+        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Guardar la información de mesa y mozo
+                String mesaNumero = editTextMesa.getText().toString();
+                String mozoNombre = editTextMozo.getText().toString();
+
+                // Aquí deberías guardar los pedidos y pasar a la siguiente actividad
+                Toast.makeText(ActividadMostrarCarta.this, "Pedido registrado en mesa " + mesaNumero + " por " + mozoNombre, Toast.LENGTH_SHORT).show();
+
+                // Después de esto, mostrar el diálogo de confirmación final
+                mostrarDialogoConfirmarPedido();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.create().show();
+    }
+
+    private void mostrarDialogoConfirmarPedido() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirmar Pedido");
         builder.setMessage("¿Deseas confirmar este pedido?");
 
         builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // Guardar los pedidos y pasar a la siguiente actividad
-                // Aquí deberías guardar los pedidos seleccionados
-                Toast.makeText(ActividadMostrarCarta.this, "Pedido registrado", Toast.LENGTH_SHORT).show();
+                // Confirmar el pedido
+                Toast.makeText(ActividadMostrarCarta.this, "Pedido confirmado", Toast.LENGTH_SHORT).show();
             }
         });
 

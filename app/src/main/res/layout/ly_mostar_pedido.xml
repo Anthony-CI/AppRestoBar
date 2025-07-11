@@ -9,7 +9,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -17,21 +17,21 @@
             android:id="@+id/nombrePedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre Pedido"
+            android:text="Nombre del pedido"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/descripcionPedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Descripción Pedido"
+            android:text="Descripción del pedido"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/cantidadPedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cantidad: "
+            android:text="Cantidad: 0"
             android:textSize="14sp" />
 
         <TextView
@@ -47,6 +47,15 @@
             android:layout_height="wrap_content"
             android:text="Mozo: "
             android:textSize="14sp" />
+
+        <!-- EditText para cantidad (será visible solo cuando se seleccione un producto) -->
+        <EditText
+            android:id="@+id/cantidadEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Cantidad"
+            android:inputType="number"
+            android:visibility="gone" /> <!-- Inicialmente oculto -->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
