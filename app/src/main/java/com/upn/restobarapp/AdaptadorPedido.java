@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 
+import com.upn.restobarapp.Access.DAOPedidoBD;
 import com.upn.restobarapp.Model.PedidoDB;
 
 public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.PedidoViewHolder> {
@@ -88,9 +89,16 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
                 .setTitle("Cambiar estado")
                 .setMessage("¿Deseas cambiar el estado del pedido?")
                 .setPositiveButton("Sí", (dialog, which) -> {
-                    // Si el usuario selecciona "Sí", cambiar el estado y el color de fondo
-                    listaPedidos.get(position).setEstado(1);  // Establecer el estado a "Sí"
+                    // Cambiar el estado a completado (1) y cambiar el fondo a verde
+                    listaPedidos.get(position).setEstado(1);  // Actualizar el estado del objeto
                     itemView.setBackgroundColor(Color.GREEN);  // Cambiar el fondo a verde
+
+                    // Guardar el cambio en la base de datos
+                    DAOPedidoBD daoPedidoBD = new DAOPedidoBD(itemView.getContext());
+                    daoPedidoBD.open();
+                    daoPedidoBD.actualizarEstadoPedido(listaPedidos.get(position).getId(), 1);  // Actualizar en la BD
+                    daoPedidoBD.close();
+
                     notifyItemChanged(position);  // Notificar que el ítem ha cambiado
                 })
                 .setNegativeButton("No", (dialog, which) -> {

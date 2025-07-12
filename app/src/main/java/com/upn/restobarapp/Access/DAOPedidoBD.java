@@ -80,4 +80,13 @@ public class DAOPedidoBD {
         values.put("estado", estado);
         db.update("pedido", values, "id = ?", new String[]{String.valueOf(id)});
     }
+
+    // Método para actualizar el estado de un pedido
+    public void actualizarEstadoPedido(int id, int estado) {
+        ContentValues values = new ContentValues();
+        values.put("estado", estado);
+
+        // Actualizamos el estado en la base de datos para el pedido con el id especificado
+        db.update("pedido", values, "id = ?", new String[]{String.valueOf(id)});
+    }
 }
