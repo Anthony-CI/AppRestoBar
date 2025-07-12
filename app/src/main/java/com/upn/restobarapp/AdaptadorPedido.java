@@ -28,7 +28,7 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
     @Override
     public PedidoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflar el layout de cada item
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.ly_mostar_pedido, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pedido, parent, false);  // Aquí usas item_pedido.xml
         return new PedidoViewHolder(itemView);
     }
 
@@ -80,14 +80,14 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
         return listaPedidos.size();
     }
 
-    // ViewHolder que mantiene las vistas para cada item
+    // Clase ViewHolder para mantener las vistas de cada item
     public static class PedidoViewHolder extends RecyclerView.ViewHolder {
         public TextView nombrePedido;
         public TextView descripcionPedido;
         public TextView cantidadPedido;
         public TextView mesaPedido;
         public TextView mozoPedido;
-        public EditText cantidadEditText;  // EditText para ingresar la cantidad
+        public EditText cantidadEditText;
 
         public PedidoViewHolder(View itemView) {
             super(itemView);
@@ -96,7 +96,7 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
             cantidadPedido = itemView.findViewById(R.id.cantidadPedido);
             mesaPedido = itemView.findViewById(R.id.mesaPedido);
             mozoPedido = itemView.findViewById(R.id.mozoPedido);
-            cantidadEditText = itemView.findViewById(R.id.cantidadEditText); // Campo para ingresar cantidad
+            cantidadEditText = itemView.findViewById(R.id.cantidadEditText);  // EditText para cantidad
         }
     }
 }

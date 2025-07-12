@@ -7,55 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".ActividadMostrarPedido">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- RecyclerView para mostrar los pedidos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPedidos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/nombrePedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre del pedido"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/descripcionPedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Descripción del pedido"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/cantidadPedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cantidad: 0"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/mesaPedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mesa: "
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/mozoPedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mozo: "
-            android:textSize="14sp" />
-
-        <!-- EditText para cantidad (será visible solo cuando se seleccione un producto) -->
-        <EditText
-            android:id="@+id/cantidadEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Cantidad"
-            android:inputType="number"
-            android:visibility="gone" /> <!-- Inicialmente oculto -->
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_pedido" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
