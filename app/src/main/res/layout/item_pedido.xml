@@ -40,11 +40,5 @@
         android:text="Mozo: "
         android:textSize="14sp" />
 
-    <EditText
-        android:id="@+id/cantidadEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Cantidad"
-        android:inputType="number"
-        android:visibility="gone" />
+
 </LinearLayout>

@@ -50,28 +50,14 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
             holder.itemView.setBackgroundColor(Color.RED);
         }
 
-        // Si el item está seleccionado, cambiar el borde y mostrar el campo de cantidad
-        if (position == selectedPosition) {
-            holder.itemView.setBackgroundColor(Color.LTGRAY);  // Cambiar color de selección
-            holder.cantidadEditText.setVisibility(View.VISIBLE);  // Mostrar el campo de cantidad
-            holder.cantidadEditText.setText(String.valueOf(pedido.getCantidad()));  // Mostrar la cantidad actual
-        } else {
-            holder.itemView.setBackgroundColor(Color.WHITE);  // Color normal
-            holder.cantidadEditText.setVisibility(View.GONE);  // Ocultar el campo de cantidad
-        }
+        // Aquí no hay necesidad de mostrar el campo de cantidad
+        // Eliminar la parte de código que hace referencia al EditText
 
         // Listener para seleccionar un item
         holder.itemView.setOnClickListener(v -> {
-            selectedPosition = position;  // Marcar el item como seleccionado
-            notifyDataSetChanged();  // Notificar que se ha actualizado la vista
-        });
-
-        // Listener para editar la cantidad cuando el campo tiene el foco
-        holder.cantidadEditText.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                // Actualizar la cantidad cuando el campo obtiene el foco
-                pedido.setCantidad(Integer.parseInt(holder.cantidadEditText.getText().toString()));
-            }
+            // Cambiar selección solo si es necesario
+            selectedPosition = position;
+            notifyDataSetChanged();  // Actualizar la vista
         });
     }
 
@@ -96,7 +82,6 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
             cantidadPedido = itemView.findViewById(R.id.cantidadPedido);
             mesaPedido = itemView.findViewById(R.id.mesaPedido);
             mozoPedido = itemView.findViewById(R.id.mozoPedido);
-            cantidadEditText = itemView.findViewById(R.id.cantidadEditText);  // EditText para cantidad
         }
     }
 }
