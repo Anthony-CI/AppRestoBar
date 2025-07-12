@@ -61,6 +61,19 @@ public class DAOPedidoBD {
         return pedidos;
     }
 
+    public long insertarPedido(PedidoDB pedido) {
+        ContentValues values = new ContentValues();
+        values.put("nombre", pedido.getNombre());
+        values.put("descripcion", pedido.getDescripcion());
+        values.put("cantidad", pedido.getCantidad());
+        values.put("mesaNumero", pedido.getMesaNumero());
+        values.put("nombreMozo", pedido.getNombreMozo());
+        values.put("estado", pedido.getEstado());  // Estado (pendiente o completado)
+
+        // Insertamos el pedido en la base de datos y devolvemos el ID generado
+        return db.insert("pedido", null, values);
+    }
+
     // Cambiar el estado del pedido
     public void cambiarEstadoPedido(int id, int estado) {
         ContentValues values = new ContentValues();

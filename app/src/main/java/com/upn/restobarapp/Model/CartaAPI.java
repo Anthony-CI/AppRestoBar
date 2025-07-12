@@ -1,8 +1,11 @@
 package com.upn.restobarapp.Model;
 
+import android.widget.EditText;
+
 import androidx.annotation.NonNull;
 
 public class CartaAPI {
+    public EditText editCantidad;
     private int idCarta;
     private String nombre;
     private String descripcion;

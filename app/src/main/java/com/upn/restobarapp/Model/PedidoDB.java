@@ -9,6 +9,27 @@ public class PedidoDB {
     private String nombreMozo;
     private int estado; // 0 para pendiente, 1 para completado
 
+    // Constructor con parámetros
+    public PedidoDB(String nombre, String descripcion, int cantidad, int mesaNumero, String nombreMozo, int estado) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.cantidad = cantidad;
+        this.mesaNumero = mesaNumero;
+        this.nombreMozo = nombreMozo;
+        this.estado = estado;
+    }
+
+    // Constructor sin parámetros (si deseas crear objetos sin necesidad de los parámetros)
+    public PedidoDB() {
+        // Puedes inicializar los campos con valores predeterminados si lo deseas
+        this.nombre = "";
+        this.descripcion = "";
+        this.cantidad = 0;
+        this.mesaNumero = 0;
+        this.nombreMozo = "";
+        this.estado = 0;
+    }
+
     // Getters y Setters
     public int getId() {
         return id;

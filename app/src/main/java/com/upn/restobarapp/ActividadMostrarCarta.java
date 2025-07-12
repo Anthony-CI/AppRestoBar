@@ -33,103 +33,72 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ActividadMostrarCarta extends AppCompatActivity {
-
     private RecyclerView rvListaCarta;
     private RecyclerView rvListaPedidos;
     private List<CartaAPI> listaCarta;
-    private ListView listView;
-    private AdaptadorPedido adaptadorPedido;
-    private List<PedidoDB> listaPedidos;
+    private List<CartaAPI> cartaSeleccionada = new ArrayList<>(); // Lista de cartas seleccionadas
     private DAOPedidoBD daoPedidoBD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.ly_mostrar_carta);
-
 
         Toolbar toolbar = findViewById(R.id.tbMostrar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        // Inicializar el RecyclerView de las cartas
+        // Inicializar RecyclerView de cartas
         rvListaCarta = findViewById(R.id.rvListaCarta);
         rvListaCarta.setLayoutManager(new LinearLayoutManager(this));
-        MostrarListadoDeCartaApi();  // Mostrar las cartas desde la API
+        MostrarListadoDeCartaApi();  // Mostrar cartas desde la API
 
-        // Inicializar el RecyclerView de los pedidos
-        rvListaPedidos = findViewById(R.id.rvListaPedidos);  // Referencia al RecyclerView de pedidos
-        rvListaPedidos.setLayoutManager(new LinearLayoutManager(this));  // Mostrar los pedidos en una lista
+        // Inicializar RecyclerView de pedidos
+        rvListaPedidos = findViewById(R.id.rvListaPedidos);
+        rvListaPedidos.setLayoutManager(new LinearLayoutManager(this));  // Mostrar los pedidos
 
-        // Obtener los pedidos de la base de datos
-        listaPedidos = new ArrayList<>();
+        // Inicializar DAO para pedidos
         daoPedidoBD = new DAOPedidoBD(this);
 
-        // Abrir la base de datos antes de obtener los pedidos
-        daoPedidoBD.open();  // Asegúrate de abrir la base de datos antes de realizar la consulta
-        listaPedidos = daoPedidoBD.obtenerPedidos();
-        daoPedidoBD.close();  // Cierra la base de datos después de usarla
-
-        // Adaptador para los pedidos
-        adaptadorPedido = new AdaptadorPedido(listaPedidos);  // Solo pasamos la lista de pedidos
-        rvListaPedidos.setAdapter(adaptadorPedido);
-
-
-
-
-
-
-        // Botón flotante para enviar los pedidos
+        // Botón para enviar pedidos
         findViewById(R.id.btnEnviarPedidos).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mostrarDialogoRegistrarPedido();
             }
         });
-
-
-
     }
-
-
-
 
     private void MostrarListadoDeCartaApi() {
         ProgressDialog barraProgreso = new ProgressDialog(this);
         barraProgreso.setMessage("Espere, cargando datos");
         barraProgreso.show();
-        //leer la api de tipo get de nuestro servicio web
+
+        // Llamar a la API para obtener las cartas
         ApiServicio oServicio = RetrofitCliente.getCliente().create(ApiServicio.class);
-        //donde se va ha cargar
         Call<List<CartaAPI>> call = oServicio.GetCartas();
         call.enqueue(new Callback<List<CartaAPI>>() {
             @Override
             public void onResponse(Call<List<CartaAPI>> call, Response<List<CartaAPI>> response) {
-                if(response.isSuccessful() && response!=null){
-                    AdaptadorCartaApi oAdaptador = null;
+                if(response.isSuccessful() && response != null){
                     listaCarta = response.body();
-                    oAdaptador = new AdaptadorCartaApi(ActividadMostrarCarta.this,listaCarta);
+                    AdaptadorCartaApi oAdaptador = new AdaptadorCartaApi(ActividadMostrarCarta.this, listaCarta, cartaSeleccionada);
                     rvListaCarta.setAdapter(oAdaptador);
-
-                }else {
-                    Toast.makeText(ActividadMostrarCarta.this, "lista vacia: " +response.message(), Toast.LENGTH_LONG);
+                } else {
+                    Toast.makeText(ActividadMostrarCarta.this, "Lista vacía: " + response.message(), Toast.LENGTH_LONG).show();
                 }
                 barraProgreso.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<CartaAPI>> call, Throwable t) {
-                Toast.makeText(ActividadMostrarCarta.this, "Error al conectar al servidor:" +t.getMessage(), Toast.LENGTH_LONG);
+                Toast.makeText(ActividadMostrarCarta.this, "Error al conectar al servidor: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 barraProgreso.dismiss();
             }
         });
     }
 
-
     private void mostrarDialogoRegistrarPedido() {
-        // Mostrar un diálogo para ingresar el número de mesa y nombre del mozo
         final View customLayout = getLayoutInflater().inflate(R.layout.dialogo_mesa_mozo, null);
         final EditText editTextMesa = customLayout.findViewById(R.id.editTextMesa);
         final EditText editTextMozo = customLayout.findViewById(R.id.editTextMozo);
@@ -142,14 +111,45 @@ public class ActividadMostrarCarta extends AppCompatActivity {
 
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // Guardar la información de mesa y mozo
                 String mesaNumero = editTextMesa.getText().toString();
                 String mozoNombre = editTextMozo.getText().toString();
 
-                // Aquí deberías guardar los pedidos y pasar a la siguiente actividad
-                Toast.makeText(ActividadMostrarCarta.this, "Pedido registrado en mesa " + mesaNumero + " por " + mozoNombre, Toast.LENGTH_SHORT).show();
+                // Guardar los pedidos seleccionados
+                for (CartaAPI carta : cartaSeleccionada) {
+                    // Obtener la cantidad desde el EditText de la carta seleccionada
+                    int cantidad = 0;
+                    // Acceder al ViewHolder para obtener la cantidad
+                    // Aquí buscamos el editCantidad correspondiente
+                    for (CartaAPI holder : listaCarta) {
+                        if (carta == holder) {
+                            EditText editCantidad = holder.editCantidad;
+                            if (editCantidad != null && !editCantidad.getText().toString().isEmpty()) {
+                                cantidad = Integer.parseInt(editCantidad.getText().toString());  // Obtener la cantidad
+                            }
+                        }
+                    }
 
-                // Después de esto, mostrar el diálogo de confirmación final
+                    // Crear un nuevo pedido con los datos
+                    PedidoDB nuevoPedido = new PedidoDB(
+                            carta.getNombre(),
+                            carta.getDescripcion(),
+                            cantidad,  // Asignar la cantidad desde el EditText
+                            Integer.parseInt(mesaNumero), // Número de mesa
+                            mozoNombre, // Nombre del mozo
+                            0 // Estado inicial (pendiente)
+                    );
+
+                    // Insertar el pedido en la base de datos
+                    DAOPedidoBD daoPedidoBD = new DAOPedidoBD(ActividadMostrarCarta.this);
+                    daoPedidoBD.open();
+                    long idInsertado = daoPedidoBD.insertarPedido(nuevoPedido);
+                    daoPedidoBD.close();
+
+                    // Mostrar un mensaje de confirmación
+                    Toast.makeText(ActividadMostrarCarta.this, "Pedido registrado: " + nuevoPedido.getNombre(), Toast.LENGTH_SHORT).show();
+                }
+
+                // Mostrar el diálogo de confirmación final
                 mostrarDialogoConfirmarPedido();
             }
         });
