@@ -1,6 +1,7 @@
 package com.upn.restobarapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,19 +46,15 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
 
         // Cambiar el color de fondo según el estado
         if (pedido.getEstado() == 1) {
-            holder.itemView.setBackgroundColor(Color.GREEN);
+            holder.itemView.setBackgroundColor(Color.GREEN);  // Si el estado es "Sí", fondo verde
         } else {
-            holder.itemView.setBackgroundColor(Color.RED);
+            holder.itemView.setBackgroundColor(Color.RED);  // Si no es "Sí", fondo rojo
         }
-
-        // Aquí no hay necesidad de mostrar el campo de cantidad
-        // Eliminar la parte de código que hace referencia al EditText
 
         // Listener para seleccionar un item
         holder.itemView.setOnClickListener(v -> {
-            // Cambiar selección solo si es necesario
-            selectedPosition = position;
-            notifyDataSetChanged();  // Actualizar la vista
+            // Mostrar el diálogo al hacer clic en el item
+            mostrarDialogoCambioEstado(holder.itemView, position);
         });
     }
 
@@ -83,5 +80,24 @@ public class AdaptadorPedido extends RecyclerView.Adapter<AdaptadorPedido.Pedido
             mesaPedido = itemView.findViewById(R.id.mesaPedido);
             mozoPedido = itemView.findViewById(R.id.mozoPedido);
         }
+    }
+
+    private void mostrarDialogoCambioEstado(View itemView, int position) {
+        // Crear el diálogo de confirmación
+        new AlertDialog.Builder(itemView.getContext())
+                .setTitle("Cambiar estado")
+                .setMessage("¿Deseas cambiar el estado del pedido?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    // Si el usuario selecciona "Sí", cambiar el estado y el color de fondo
+                    listaPedidos.get(position).setEstado(1);  // Establecer el estado a "Sí"
+                    itemView.setBackgroundColor(Color.GREEN);  // Cambiar el fondo a verde
+                    notifyItemChanged(position);  // Notificar que el ítem ha cambiado
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    // Si el usuario selecciona "No", no hacer nada
+                    dialog.dismiss();
+                })
+                .create()
+                .show();
     }
 }
